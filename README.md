@@ -19,7 +19,7 @@ then run it
 python mega.py -h
 
 ```
-#Guide
+# Guide
 
 one url
 ```
@@ -38,10 +38,10 @@ python mega.py -i <file>
 
 
 
-
+<!--- CRINGE
 #### donate if you liked what i do :)
 #### bitcoin:
 #### bc1q773tfvtmuefey2rc2smh98m6xtcuza29xfgfyw
 #### ETH:
 #### 0xf09B18434F441E49fc90BE141b2Ba3877c1C1b2d
-#### you don't have to
+#### you don't have to --->

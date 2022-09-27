@@ -31,7 +31,7 @@ python mega.py -i <file>
 
 ## to-do
 
-- add drive links support
+- [ ] add drive links support
 
 
 

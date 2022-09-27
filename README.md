@@ -17,19 +17,16 @@ pip install -r requirements.txt
 then run it
 ```
 python mega.py -h
-
 ```
 # Guide
 
 one url
 ```
 python mega.py -u <url>
-
 ```
 file
 ```
 python mega.py -i <file>
-
 ```
 
 ## to-do

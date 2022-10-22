@@ -16,7 +16,7 @@ def mega_valid(id,type):
     
     url = 'https://g.api.mega.co.nz/cs?id=5644474&n='+id
     req0 = requests.post(url, json=data)
-    print(req0.text)
+    #print(req0.text)
     #validation
     if has_numbers(req0.text) and int(req0.text) < 0:
         print('not valid')
@@ -26,51 +26,37 @@ def mega_valid(id,type):
         print('valid')
         print('='*17)
         return 0
-def validation(url):        
-    noindx = url.find('/#F!')
+def patternMatch(url):
+    pattern_mega = r'.*mega.nz\/(file|folder)\/([\s\S]*)#(([\s\S])*)'
+    pattern_mega2 = r'.*mega.nz\/#F!(.*)!'
+    pattern_mega3 = r'.*mega.nz\/#!(.*)!'
+    patternList = [pattern_mega, pattern_mega2, pattern_mega3]
 
-    m = re.match(pattern_mega, url)
-    if noindx and not m:
- 
-        	
-        m1 = re.match(pattern_mega2, url)
-        if m1:
-   
-            id = m1[3]
-            type = m1[2]
-            print(id)
-            print(type)
-            if mega_valid(id,type) == 1:
-           
-                return 'not valid'
-            else:
- 
-                return 'valid'
-    if m:
-        id = m[3]
-        type = m[2]
+    for pattern in patternList:
+        matched = re.match(pattern, url)
 
-        print(id)
-        print(type)
-        if mega_valid(id,type) == 1:
+        if matched:
+            if len(matched.groups()) > 1:
+                    linkType = matched.group(1)
+                    linkId = matched.group(2)
 
-                return 'not valid'
-        else:
-  
-                return 'valid'
-        
-        
-    if not m:
-       
-                print("not a mega link") 
-                return 'not a mega link'    
+                    print(linkType)
+                    print(linkId)
+                    return 'not valid' if mega_valid(linkId,linkType) == 1 else 'valid'
+                    #return 0
+            else:        
+                    linkId = matched.group(1)
+                    print(linkId)
+                    return 'not valid' if mega_valid(linkId,0) == 1 else 'valid'
+                    #return 0
 
-pattern_mega = re.compile('(https|http):\/\/mega.nz\/(file|folder)\/([\s\S]*)#(([\s\S])*)')	
-pattern_mega2 = re.compile('(https|http):\/\/mega.nz\/(#F!)(.*)!.*')
+    print('not a mega link')
+    return 'not a mega link'  
 
 parser = argparse.ArgumentParser(description='Validate MEGA links')
 parser.add_argument('-u','--url', help='to test one url')
 parser.add_argument('-i','--input', help='input file with links')
+parser.add_argument('-o','--output', help='output file, default "./output.txt"')
 args = parser.parse_args()
 print("""
 
@@ -84,8 +70,10 @@ print("""
 
 Credits: Titoot
 hope you like it!
+
+for help:
+    mega.py --help
 """)
-#print("starting...")
 
 if args.url:
     
@@ -94,10 +82,15 @@ if args.url:
 if args.input:
     try:
         f1 = open(args.input,'r')
-        for i in f1:
- 
+
+        if args.output:
+            f2 = open(args.output, 'a')
+        else:
             f2 = open('output.txt', 'a')
-            f2.write(i[:-1] + ' | ' + validation(i) + '\n')
-    except FileNotFoundError as e:
+
+        for i in f1:   
+            f2.write(i[:-1] + ' | ' + patternMatch(i) + '\n')
+            #patternMatch(i)
+    except FileNotFoundError:
         print('Error: File not found')
     

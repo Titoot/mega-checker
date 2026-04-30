@@ -78,7 +78,7 @@ for help:
 if args.url:
     
     f2 = open('output.txt', 'a')
-    f2.write(args.url + ' | ' + validation(args.url))
+    f2.write(args.url + ' | ' + patternMatch(args.url))
 if args.input:
     try:
         f1 = open(args.input,'r')
